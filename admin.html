@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCiIfKT6ZeZVo5MJpOBaTZTvO2whCB3yjY",
+            authDomain: "bolos-da-yasmin.firebaseapp.com",
+            projectId: "bolos-da-yasmin",
+            storageBucket: "bolos-da-yasmin.appspot.com",
+            messagingSenderId: "741215947057",
+            appId: "1:741215947057:web:cda2faf81ec994a8a68810",
+            measurementId: "G-Q9QFFWM71H"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.loginAdmin = async function () {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const docRef = doc(db, "admin", "UMkYfBH5Ngs7sh33fBQr");
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                if (username === data.user && password === data.senha) {
+                    alert("Login successful!");
+                    localStorage.setItem('isLoggedIn', 'true'); // Armazenando estado de login
+                    window.location.href = "admin_dashboard.html";
+                } else {
+                    alert("Invalid username or password.");
+                }
+            } else {
+                alert("No such document!");
+            }
+        };
+    </script>
+</head>
+
+<body style="background-color: #deaef296 !important;">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <h3 class="text-center">Admin Login</h3>
+                <a href="index.html">Home</a>   
+                <div class="card p-4 shadow">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">User</label>
+                        <input type="text" id="username" class="form-control" placeholder="Enter user">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter password">
+                    </div>
+                    <button class="btn btn-primary w-100" onclick="loginAdmin()">Login</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
